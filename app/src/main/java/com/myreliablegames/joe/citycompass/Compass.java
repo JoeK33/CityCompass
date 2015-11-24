@@ -14,8 +14,10 @@ import android.widget.ImageView;
 public class Compass implements SensorEventListener {
 
     private ImageView compassNeedle;
-    private float currentCompassDegree = 0f;
+    private double currentCompassDegree = 0f;
     private SensorManager sensorManager;
+    private double degree;
+    private float rotDegree;
 
     public Compass(Activity activity) {
         compassNeedle = (ImageView) activity.findViewById(R.id.imageViewCompassNeedle);
@@ -33,14 +35,20 @@ public class Compass implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // get the angle around the z-axis rotated
-        float degree = Math.round(event.values[0]);
-        compassNeedle.setRotation(-degree);
-        currentCompassDegree = -degree;
+        // get the angle rotated around the z-axis. negative to make the needle rotate the right direction
+        degree = -event.values[0];
+        // correct rotation so needle does not do a 360 over the north axis
+        rotDegree = (float) RotateHelper.getProperRotation(this, degree);
+        compassNeedle.animate().rotation(rotDegree).setDuration(150);
+        compassNeedle.setRotation(rotDegree);
+        currentCompassDegree = rotDegree;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // unused
+    }
+
+    public double getCompassDegree() {
+        return currentCompassDegree;
     }
 }

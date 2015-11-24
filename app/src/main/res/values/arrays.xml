@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="radiusOptions">
+        <item>1 mile</item>
+        <item>10 miles</item>
+        <item>50 miles</item>
+        <item>100 miles</item>
+        <item>500 miles</item>
+        <item>1000 miles</item>
+        <item>2000 miles</item>
+        <item>3000 miles</item>
+        <item>5000 miles</item>
+    </string-array>
+
+    <string-array name="radiusValues">
+        <item>1</item>
+        <item>10</item>
+        <item>50</item>
+        <item>100</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+        <item>5000</item>
+    </string-array>
+
+    <string-array name="cityOptions">
+        <item>1 City</item>
+        <item>5 Cities</item>
+        <item>10 Cities</item>
+        <item>15 Cities</item>
+        <item>20 Cities</item>
+        <item>25 Cities</item>
+        <item>30 Cities</item>
+    </string-array>
+
+    <string-array name="cityValues">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+    </string-array>
+</resources>

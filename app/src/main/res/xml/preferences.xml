@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <PreferenceCategory
+        android:title="Settings" >
+        <ListPreference
+            android:title="Radius"
+            android:entries="@array/radiusOptions"
+            android:entryValues="@array/radiusValues"
+            android:key="radius"
+            android:summary="Approximate search radius"
+            android:defaultValue="50"
+            android:persistent="true"/>
+
+        <ListPreference
+            android:title="Cities"
+            android:entries="@array/cityOptions"
+            android:entryValues="@array/cityValues"
+            android:key="cities"
+            android:summary="The maximum number of cities displayed"
+            android:defaultValue="10"
+            android:persistent="true"/>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
+

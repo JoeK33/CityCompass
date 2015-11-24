@@ -16,11 +16,11 @@ public class URLMaker {
 
     private static final String TAG = "URL Maker";
 
-    public static URL getURL(Double latitude, Double longitude, Context context) {
+    public static URL getURL(Double latitude, Double longitude, int numCities, int searchRadius, Context context) {
 
         // example url: http://api.geonames.org/citiesJSON?north=44.1&south=-9.9&east=-22.4&west=55.2&lang=de&username=demo
 
-        GeoLocation[] location = GeoLocation.fromDegrees(latitude, longitude).boundingCoordinates(Constants.SEARCH_RADIUS, Constants.EARTH_RADIUS_MILES);
+        GeoLocation[] location = GeoLocation.fromDegrees(latitude, longitude).boundingCoordinates(searchRadius, Constants.EARTH_RADIUS_MILES);
 
         StringBuilder urlString = new StringBuilder();
         urlString.append("http://api.geonames.org/citiesJSON?");
@@ -29,7 +29,8 @@ public class URLMaker {
         urlString.append("&east=").append(location[1].getLongitudeInDegrees());
         urlString.append("&west=").append(location[0].getLongitudeInDegrees());
         urlString.append("&username=").append(context.getResources().getString((R.string.username)));
-        urlString.append("&maxRows=20");
+        urlString.append("&maxRows=");
+        urlString.append(numCities);
 
         Log.v("JSON URL", urlString.toString());
 

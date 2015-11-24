@@ -10,14 +10,17 @@ import android.content.DialogInterface;
  */
 public class LoadingPopup extends ProgressDialog {
 
-    public LoadingPopup(Context context, final DataCollector dataCollector, final Activity activity) {
+    Context context;
+
+    public LoadingPopup(Context context, final GetDataTask getDataTask, final Activity activity) {
         super(context);
+        this.context = context;
         // show loading bar
         this.setMessage("Searching...");
         this.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                dataCollector.cancel(true);
+                getDataTask.cancel(true);
                 activity.finish();
             }
         });
