@@ -32,7 +32,7 @@ public class URLMaker {
         urlString.append("&maxRows=");
         urlString.append(numCities);
 
-        Log.v("JSON URL", urlString.toString());
+        //Log.v("JSON URL", urlString.toString());
 
         URL url = null;
 

@@ -42,6 +42,8 @@ public class Compass implements SensorEventListener {
         compassNeedle.animate().rotation(rotDegree).setDuration(150);
         compassNeedle.setRotation(rotDegree);
         currentCompassDegree = rotDegree;
+
+        // Log.v("Compass", Double.toString(degree));
     }
 
     @Override

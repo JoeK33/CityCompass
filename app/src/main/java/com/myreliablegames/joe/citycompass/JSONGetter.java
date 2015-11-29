@@ -17,12 +17,11 @@ import java.net.URL;
  * Created by Joe on 11/14/2015.
  */
 public class JSONGetter {
-    private static final String TAG = "JSON Getter";
 
+    private static final String TAG = "JSON Getter";
 
     private JSONGetter() {
     }
-
 
     public static JSONObject getJSONFromUrl(URL url, final Activity activity) {
 
@@ -61,7 +60,6 @@ public class JSONGetter {
                             Toast.LENGTH_SHORT).show();
                 }
             });
-
 
         }
 

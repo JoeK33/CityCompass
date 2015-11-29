@@ -4,7 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class CityMaker {
 
     public static List getCities(JSONObject object) throws JSONException {
 
-        List cityList = new LinkedList();
+        List cityList = Collections.synchronizedList(new ArrayList<City>());
         JSONArray results = object.getJSONArray("geonames");
 
         for (int i = 0; i < results.length(); i++) {

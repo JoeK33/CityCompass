@@ -22,13 +22,12 @@ public class GetDataTask extends AsyncTask<String, Void, JSONObject> {
     private LoadingPopup loadingPopup;
     private Activity activity;
     private CityRing cityRing;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         loadingPopup.show();
-
     }
 
     public GetDataTask(Context context, Activity activity, CityRing cityRing) {
@@ -36,7 +35,6 @@ public class GetDataTask extends AsyncTask<String, Void, JSONObject> {
         this.context = context;
         this.activity = activity;
         loadingPopup = new LoadingPopup(context, this, activity);
-
     }
 
     @Override
@@ -51,7 +49,6 @@ public class GetDataTask extends AsyncTask<String, Void, JSONObject> {
                 context);
 
         JSONObject object = JSONGetter.getJSONFromUrl(url, this.activity);
-
 
         return object;
     }

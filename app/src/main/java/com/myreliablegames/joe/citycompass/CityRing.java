@@ -7,8 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewManager;
@@ -16,44 +14,31 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Joe on 11/18/2015.
  */
 public class CityRing implements SensorEventListener {
+
     List<City> cities;
     List<TextView> textViews;
     Activity activity;
     Compass compass;
     private SensorManager sensorManager;
-    private int screenWidth;
-    private int screenHeight;
     double radius;
     final TextView citiesAheadView;
-    StringBuilder citiessAhead;
-
+    StringBuilder citiesAhead;
 
     public CityRing(Activity activity, Compass compass) {
         this.activity = activity;
         this.compass = compass;
         sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-        textViews = new LinkedList<>();
+        textViews = new ArrayList<>();
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        screenWidth = displaymetrics.widthPixels;
-        screenHeight = displaymetrics.heightPixels;
-
-        // make radius. one quarter of the shorter side of the device screen
-        int shortSide;
-
-        if (screenWidth >= screenWidth) {
-            shortSide = screenWidth;
-        } else shortSide = screenHeight;
-
-        radius = shortSide / 4;
+        // ring radius is 1/4 the short side of the decive screen size
+        radius = DisplayHelper.getShortSide(activity) / 4;
 
         citiesAheadView = new TextView(activity.getApplicationContext());
         citiesAheadView.setTextColor(Color.BLACK);
@@ -66,7 +51,7 @@ public class CityRing implements SensorEventListener {
 
 
         activity.addContentView(citiesAheadView, lp);
-        citiessAhead = new StringBuilder();
+        citiesAhead = new StringBuilder();
 
 
     }
@@ -81,10 +66,14 @@ public class CityRing implements SensorEventListener {
     }
 
     public void setCitiesAndUpdate(List<City> cities) {
-        this.cities = cities;
+        synchronized (cities) {
+            if (this.cities != null) {
+                this.cities.clear();
+            }
+            this.cities = cities;
+        }
         placeCities();
         update();
-
     }
 
     public boolean hasCities() {
@@ -96,36 +85,36 @@ public class CityRing implements SensorEventListener {
 
     public void placeCities() {
 
-        for (City c : cities) {
+        synchronized (cities) {
 
-            double radAngle = Math.toRadians(CityHelper.getBearing(c) + compass.getCompassDegree() - 90);
+            for (City c : cities) {
 
+                double radAngle = Math.toRadians(CityHelper.getBearing(c) + compass.getCompassDegree() - 90);
 
-            TextView textView = new TextView(activity.getApplicationContext());
-            textView.setText(" \u2022  " + (c.name) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
-            textView.setTextColor(Color.BLACK);
-            textView.setGravity(Gravity.CENTER);
-            textView.setShadowLayer(15f, -5, 0, Color.WHITE);
+                TextView textView = new TextView(activity.getApplicationContext());
+                textView.setText(" \u2022   " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
+                textView.setTextColor(Color.BLACK);
+                textView.setGravity(Gravity.CENTER);
+                textView.setShadowLayer(25f, 1, 1, Color.WHITE);
 
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.gravity = Gravity.CENTER;
-            textView.setLayoutParams(lp);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                lp.gravity = Gravity.CENTER;
+                textView.setLayoutParams(lp);
 
+                textView.setTranslationX((float) radius * (float) Math.cos(radAngle));
+                textView.setTranslationY((float) radius * (float) Math.sin(radAngle));
 
-            textView.setTranslationX((float) radius * (float) Math.cos(radAngle));
-            textView.setTranslationY((float) radius * (float) Math.sin(radAngle));
-            // Set the rotation of the view.
-            textView.setRotation((float) CityHelper.getBearing(c) + (float) compass.getCompassDegree() - 90);
+                // Set the rotation of the view.
+                textView.setRotation((float) CityHelper.getBearing(c) + (float) compass.getCompassDegree() - 90);
 
-            activity.addContentView(textView, lp);
-            textViews.add(textView);
+                activity.addContentView(textView, lp);
+                textViews.add(textView);
 
-            Log.v("CityRing", c.name + " Bearing: " + CityHelper.getBearing(c) + " Rad Angle: " + radAngle + " Compass Angle: " + compass.getCompassDegree() + " Current Degree: " + c.currentDegree);
+                // Log.v("CityRing", c.name + " Bearing: " + CityHelper.getBearing(c) + " Rad Angle: " + radAngle + " Compass Angle: " + compass.getCompassDegree() + " Current Degree: " + c.currentDegree);
 
+            }
         }
-
-
     }
 
     @Override
@@ -135,19 +124,19 @@ public class CityRing implements SensorEventListener {
         }
     }
 
-
     private void update() {
         RingUpdater.update(this);
     }
 
     public void clear() {
-        this.cities.clear();
+        synchronized (this.cities) {
+            this.cities.clear();
+        }
         for (TextView v : textViews) {
             ((ViewManager) v.getParent()).removeView(v);
         }
         textViews.clear();
     }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

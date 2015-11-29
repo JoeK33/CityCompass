@@ -6,15 +6,13 @@ package com.myreliablegames.joe.citycompass;
 public class CityHelper {
 
     private CityHelper() {
-
     }
 
     public static Double distanceToCity(City city) {
         Double[] location = MainActivity.locater.getLatLng();
-        Double distance = DistanceCalculator.distance(location[0], location[1], city.latitude, city.longitude, "M");
+        Double distance = DistanceCalculator.distance(location[0], location[1], city.getLatitude(), city.getLongitude(), "M");
         return distance;
     }
-
 
     public static double getBearing(City city) {
 
@@ -23,8 +21,8 @@ public class CityHelper {
         double userLat = Math.toRadians(location[0]);
         double userLong = location[1];
 
-        double cityLat = Math.toRadians(city.latitude);
-        double cityLong = city.longitude;
+        double cityLat = Math.toRadians(city.getLatitude());
+        double cityLong = city.getLongitude();
 
         double longDiff = Math.toRadians(cityLong - userLong);
 
@@ -32,7 +30,6 @@ public class CityHelper {
         double x = Math.cos(userLat) * Math.sin(cityLat) - Math.sin(userLat) * Math.cos(cityLat) * Math.cos(longDiff);
 
         return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
-
     }
 }
 

@@ -25,6 +25,4 @@ public class LoadingPopup extends ProgressDialog {
             }
         });
     }
-
-
 }
