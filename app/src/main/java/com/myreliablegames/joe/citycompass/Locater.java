@@ -54,27 +54,15 @@ public class Locater {
             });
         }
 
-        try
-
-        {
+        try {
             Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             longitude = location.getLongitude();
             latitude = location.getLatitude();
-        } catch (
-                Exception e
-                )
-
-        {
+        } catch (Exception e) {
             Log.v(TAG, e.toString());
         }
 
-        return new Double[]
-
-                {
-                        latitude, longitude
-                }
-
-                ;
+        return new Double[]{latitude, longitude};
     }
 
     public static boolean isLocationEnabled(Context context) {
