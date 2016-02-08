@@ -4,6 +4,15 @@
     android:layout_width="match_parent">
     <PreferenceCategory
         android:title="Settings" >
+
+        <ListPreference
+            android:title="Units"
+            android:entries="@array/unitOptions"
+            android:entryValues="@array/unitValues"
+            android:key="units"
+            android:summary="Distance Units"
+            android:defaultValue="Mi"
+            android:persistent="true"/>
         <ListPreference
             android:title="Radius"
             android:entries="@array/radiusOptions"
@@ -21,7 +30,6 @@
             android:summary="The maximum number of cities displayed"
             android:defaultValue="10"
             android:persistent="true"/>
-
     </PreferenceCategory>
 
 

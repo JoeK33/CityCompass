@@ -92,7 +92,8 @@ public class CityRing implements SensorEventListener {
                 double radAngle = Math.toRadians(CityHelper.getBearing(c) + compass.getCompassDegree() - 90);
 
                 TextView textView = new TextView(activity.getApplicationContext());
-                textView.setText(" \u2022   " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
+                //textView.setText(" \u2022   " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
+                textView.setText("     " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c, activity).intValue()) + CityHelper.appendUnits(activity));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 10);
                 textView.setTextColor(Color.BLACK);
                 textView.setGravity(Gravity.CENTER);
@@ -122,6 +123,10 @@ public class CityRing implements SensorEventListener {
         if (cities != null) {
             update();
         }
+    }
+
+    public Context getContext(){
+        return this.activity.getApplicationContext();
     }
 
     private void update() {

@@ -1,5 +1,6 @@
 package com.myreliablegames.joe.citycompass;
 
+import android.content.Context;
 import android.widget.TextView;
 
 import java.util.Iterator;
@@ -11,6 +12,7 @@ public class RingUpdater {
 
     private RingUpdater() {
     }
+
 
 
     public static void update(final CityRing ring) {
@@ -59,17 +61,18 @@ public class RingUpdater {
                             ring.activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ring.citiesAhead.append((c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)" + "\n");
+                                    ring.citiesAhead.append((c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c, ring.getContext()).intValue()) + CityHelper.appendUnits(ring.getContext()) + "\n");
                                 }
                             });
                         }
-                        // move the bullet point to the other side when city textview flips
+                        // flip spacing to other side when crossing axis
                         if (c.getCurrentDegree() > 90 && c.getCurrentDegree() < 275) {
 
                             ring.activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textView.setText((c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)" + "   \u2022 ");
+                                   // textView.setText((c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)" + "   \u2022 ");
+                                    textView.setText((c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c, ring.getContext()).intValue()) + CityHelper.appendUnits(ring.getContext()) + "     ");
                                 }
                             });
                         } else {
@@ -77,7 +80,8 @@ public class RingUpdater {
                             ring.activity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textView.setText(" \u2022  " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
+                                 //   textView.setText(" \u2022  " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c).intValue()) + " Mi)");
+                                    textView.setText("     " + (c.getName()) + " (" + Integer.toString(CityHelper.distanceToCity(c, ring.getContext()).intValue()) + CityHelper.appendUnits(ring.getContext()));
                                 }
                             });
                         }

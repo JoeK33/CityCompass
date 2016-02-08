@@ -67,4 +67,5 @@ public class MainActivity extends Activity {
         cityRing.pause();
         getDataTask.pause();
     }
+
 }
